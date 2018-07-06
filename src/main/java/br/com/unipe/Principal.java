@@ -29,7 +29,6 @@ public class Principal extends SpringBootServletInitializer {
 		SpringApplication app = new SpringApplication(Principal.class);
 
 		Environment env = app.run(args).getEnvironment();
-
 		LoggerPadrao.startApplication("\n----------------------------------------------------------\n\t" +
                 "aulaUNIPE está rodando! Acesse uma das URLs:\n\t" +
 				"IP do ELK: \t{}\n\t"+
