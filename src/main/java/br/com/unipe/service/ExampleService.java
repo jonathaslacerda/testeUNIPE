@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import br.com.unipe.domain.Example;
+import br.com.unipe.util.LoggerPadrao;
 
 @Service
 public class ExampleService {
@@ -19,6 +20,7 @@ public class ExampleService {
 			return example;
 		}
 		
+		LoggerPadrao.error("Erro de CRUD: ", new Exception("Example com nome " + example.getNome() + " já existe"));
 		throw new Exception("Example com nome " + example.getNome() + " já existe");
 	}
 	
@@ -50,7 +52,8 @@ public class ExampleService {
 		}
 		
 		if(!del) {
-			throw new Exception("Não existe Example com nome " + nome);
+			String message = "Não existe Example com nome " + nome;
+			LoggerPadrao.error(message, new Exception("Não existe Example com nome " + nome));
 		}
 	}
 	
