@@ -11,6 +11,7 @@ import br.com.unipe.util.LoggerPadrao;
 @Service
 public class ExampleService {
 
+	//TESTE
 	private List<Example> lista = new ArrayList<Example>();
 
 	public Example cadastrar(Example example) throws Exception {
