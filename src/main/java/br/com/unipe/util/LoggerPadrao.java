@@ -24,132 +24,85 @@ public class LoggerPadrao {
 
 
 	public static void info(String mensagem, Object ... args){
-
 		logInfo.info(mensagem, args);
+		Sentry.capture(mensagem);
 	}
 
 	public static void info(String mensagem){
 		logInfo.info(mensagem);
+		Sentry.capture(mensagem);
 	}
 
 	public static void transacao(String mensagem){
 		logTransacao.info("loggerTransacao - "+mensagem);
+		Sentry.capture(mensagem);
 	}
 
 	public static void debug(String mensagem, Object ... args){
 		logDebug.debug(mensagem, args);
+		Sentry.capture(mensagem);
 	}
 
 	public static void debug(String mensagem, long time){
-		logDebug.debug(mensagem+ " - "+(System.currentTimeMillis()-time)+" ms");
+		String message = mensagem+ " - "+(System.currentTimeMillis()-time)+" ms";
+		logDebug.debug(message);
+		Sentry.capture(message);
 	}
 
 
 	public static void error(String mensagem, Exception e) {
 		logErro.error(mensagem, e);
+		Sentry.capture(e);
 	}
 
 	public static void error(String string) {
 		logErro.error(string);
+		Sentry.capture(string);	
 	}
 
 	public static void info(String mensagem, long time, Object ... args){
+		String message = mensagem+" - "+(System.currentTimeMillis()-time)+" ms";
 		logInfo.info(mensagem+" - "+(System.currentTimeMillis()-time)+" ms", args);
+		Sentry.capture(message);
 	}
 
 	public static void info(String mensagem, long time){
-		logInfo.info(mensagem+ " - "+(System.currentTimeMillis()-time)+" ms");
+		String message = mensagem+ " - "+(System.currentTimeMillis()-time)+" ms";
+		logInfo.info(message);
+		Sentry.capture(message);
 	}
 
 	public static void transacao(String mensagem, long time){
-		logTransacao.info("loggerTransacao - "+mensagem+" - "+(System.currentTimeMillis()-time)+" ms");
+		String message = "loggerTransacao - "+mensagem+" - "+(System.currentTimeMillis()-time)+" ms";
+		logTransacao.info(message);
+		Sentry.capture(message);
 	}
 
 	public static void debug(String mensagem, long time, Object ... args){
+		String message = mensagem+" - "+(System.currentTimeMillis()-time)+" ms";
 		logDebug.debug(mensagem+" - "+(System.currentTimeMillis()-time)+" ms", args);
+		Sentry.capture(message);
 	}
 
 	public static void error(String mensagem, Exception e, long time) {
 		logErro.error(mensagem+" - "+(System.currentTimeMillis()-time)+" ms", e);
+		Sentry.capture(mensagem+" - "+(System.currentTimeMillis()-time)+" ms");
 	}
 
 	public static void error(String string, long time) {
-		logErro.error(string+" - "+(System.currentTimeMillis()-time)+" ms");
+		String mensagem = string+" - "+(System.currentTimeMillis()-time)+" ms"; 
+		logErro.error(mensagem);
+		Sentry.capture(mensagem);
 	}
-
-	public static void startApplication(String mensagem, Object ... args){
-
+	
+	static {
 		Sentry.init();
 		String dsn = "https://5642587651e14d6cb68da6fbb732647d@sentry.io/1238328";
 		Sentry.init(dsn);
-		sentry = SentryClientFactory.sentryClient();
-		LoggerPadrao lp = new LoggerPadrao();
-		lp.logWithStaticAPI();
-		lp.logWithInstanceAPI();
-
-//		logInfoStartApplication.info(mensagem, args);
 	}
 
-	void logWithStaticAPI() {
-		// Note that all fields set on the context are optional. Context data is copied onto
-		// all future events in the current context (until the context is cleared).
-
-		// Record a breadcrumb in the current context. By default the last 100 breadcrumbs are kept.
-		Sentry.getContext().recordBreadcrumb(
-				new BreadcrumbBuilder().setMessage("User made an action").build()
-				);
-
-		// Set the user in the current context.
-		Sentry.getContext().setUser(
-				new UserBuilder().setEmail("hello@sentry.io").build()
-				);
-
-		// Add extra data to future events in this context.
-		Sentry.getContext().addExtra("extra", "thing");
-
-		// Add an additional tag to future events in this context.
-		Sentry.getContext().addTag("tagName", "tagValue");
-
-		/*
-	        This sends a simple event to Sentry using the statically stored instance
-	        that was created in the ``main`` method.
-		 */
-		Sentry.capture("This is a test");
-
-		try {
-			unsafeMethod();
-		} catch (Exception e) {
-			// This sends an exception event to Sentry using the statically stored instance
-			// that was created in the ``main`` method.
-			Sentry.capture(e);
-		}
+	public static void startApplication(String mensagem, Object ... args){
+		logInfoStartApplication.info(mensagem, args);
+		Sentry.capture(mensagem);
 	}
-
-	/**
-	 * Examples that use the SentryClient instance directly.
-	 */
-	void logWithInstanceAPI() {
-		// Retrieve the current context.
-		Context context = sentry.getContext();
-
-		// Record a breadcrumb in the current context. By default the last 100 breadcrumbs are kept.
-		context.recordBreadcrumb(new BreadcrumbBuilder().setMessage("User made an action").build());
-
-		// Set the user in the current context.
-		context.setUser(new UserBuilder().setEmail("hello@sentry.io").build());
-
-		// This sends a simple event to Sentry.
-		sentry.sendMessage("This is a test");
-
-		try {
-			unsafeMethod();
-		} catch (Exception e) {
-			// This sends an exception event to Sentry.
-			sentry.sendException(e);
-		}
-	}
-	
-	void unsafeMethod() {
-        throw new UnsupportedOperationException("You shouldn't call this!");
-    }
 }
