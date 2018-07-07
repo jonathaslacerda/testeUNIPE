@@ -18,6 +18,7 @@ public class ExampleService {
 		
 		if(!containsName(example.getNome())) {
 			lista.add(example);
+			LoggerPadrao.info("Acao CRUD: " + example.getNome() + " cadastrado");
 			return example;
 		}
 		
@@ -30,12 +31,14 @@ public class ExampleService {
 	}
 	
 	public List<Example> listar() {
+		LoggerPadrao.info("Acao CRUD: listagem");
 		return lista;
 	}
 	
 	public Example pesquisar(String nome) {
 		for (Example example : lista) {
 			if(nome.equals(example.getNome())) {
+				LoggerPadrao.info("Acao CRUD: pesquisa");
 				return example;
 			}
 		}
@@ -55,7 +58,8 @@ public class ExampleService {
 		if(!del) {
 			String message = "Não existe Example com nome " + nome;
 			LoggerPadrao.error(message, new Exception("Não existe Example com nome " + nome));
+		}else {
+			LoggerPadrao.info("Acao CRUD: " + nome + " excluido");
 		}
 	}
-	
 }
