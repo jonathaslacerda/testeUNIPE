@@ -34,7 +34,7 @@ public class ExampleResource {
 	}
 	
 	@PostMapping("/teste")
-	@ApiOperation(value = "Este serviço eh um example.",notes = "efetua o cadastro de example")
+	@ApiOperation(value = "Este serviço eh um example.",notes = "efetua o cadastro de example teste")
 	public ResponseEntity<Example> cadastroTeste(@Valid @RequestBody Example request) throws Exception {
 		Example example = exampleService.cadastrar(request);
 		return ResponseEntity.ok(example);

@@ -135,6 +135,32 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
+			
+			<plugin>
+				<groupId>com.spotify</groupId>
+				<artifactId>docker-maven-plugin</artifactId>
+				<version>0.4.10</version>
+				<configuration>
+					<baseImage>java:openjdk-8-jdk-alpine</baseImage>
+					<imageName>docker.io/jonathaslacerda/aulaunipe</imageName>
+					<entryPoint>["java","-jar","/${project.build.finalName}.jar"]</entryPoint>
+					<serverId>docker-hub</serverId>
+					<forceTags>true</forceTags>
+					<pushImage>true</pushImage>
+					<imageTags>
+						<imageTag>${project.version}</imageTag>
+						<imageTag>latest</imageTag>
+					</imageTags>
+					<resources>
+						<resource>
+							<targetPath>/</targetPath>
+							<directory>${project.build.directory}</directory>
+							<include>${project.build.finalName}.jar</include>
+						</resource>
+					</resources>
+				</configuration>
+			</plugin>
+			
 		</plugins>
 	</build>
 </project>
