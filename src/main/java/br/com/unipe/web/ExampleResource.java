@@ -33,13 +33,6 @@ public class ExampleResource {
 		return ResponseEntity.ok(example);
 	}
 	
-	@PostMapping("/teste")
-	@ApiOperation(value = "Este serviço eh um example.",notes = "efetua o cadastro de example teste")
-	public ResponseEntity<Example> cadastroTeste(@Valid @RequestBody Example request) throws Exception {
-		Example example = exampleService.cadastrar(request);
-		return ResponseEntity.ok(example);
-	}
-	
 	@GetMapping("/")
 	@ApiOperation(value = "Este serviço que recupa example.",notes = "efetua o recupera todos os example")
 	public ResponseEntity<List<Example>> get() throws Exception {
